@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eightfold System — GTM Engineering</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #1D4ED8;
+      --blue-bright: #3B82F6;
+      --blue-glow: #60A5FA;
+      --black: #080C10;
+      --off-black: #111827;
+      --white: #FAFAFA;
+      --gray: #6B7280;
+      --gray-light: #F3F4F6;
+      --border: #E5E7EB;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+    }
+
+    /* ─── PAGE SYSTEM ─── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 72px;
+      background: rgba(250,250,250,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .nav-logo-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--black);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--gray);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover, .nav-links a.active-link { color: var(--black); }
+
+    .nav-cta {
+      background: var(--blue) !important;
+      color: var(--white) !important;
+      padding: 0.55rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 500 !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: #1e40af !important; }
+
+    /* ─── BURGER ─── */
+    .burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .burger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--black);
+      transition: 0.3s;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      padding: 120px 5% 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--blue);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--black);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 span { color: var(--blue); }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--gray);
+      max-width: 500px;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+      padding: 0.85rem 2rem;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-primary:hover { background: #1e40af; transform: translateY(-1px); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--black);
+      padding: 0.85rem 1.8rem;
+      border-radius: 6px;
+      border: 1.5px solid var(--border);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* Octopus Visual */
+    .hero-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .octopus-wrap {
+      position: relative;
+      width: 420px;
+      height: 420px;
+    }
+
+    .octopus-ring {
+      position: absolute;
+      inset: -30px;
+      border-radius: 50%;
+      border: 1px dashed rgba(59,130,246,0.2);
+      animation: spin-slow 30s linear infinite;
+    }
+
+    .octopus-ring-2 {
+      position: absolute;
+      inset: -60px;
+      border-radius: 50%;
+      border: 1px dashed rgba(59,130,246,0.1);
+      animation: spin-slow 50s linear infinite reverse;
+    }
+
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .octopus-bg {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, rgba(59,130,246,0.12), rgba(29,78,216,0.05));
+    }
+
+    .octopus-svg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    /* ─── VALUE PROPS ─── */
+    .value-props {
+      padding: 80px 5%;
+      background: var(--off-black);
+    }
+
+    .value-props-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .vp-card {
+      background: #161D2B;
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vp-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--blue);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .vp-card:hover::before { transform: scaleX(1); }
+
+    .vp-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(59,130,246,0.12);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .vp-card h3 {
+      font-size: 1.15rem;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.02em;
+    }
+
+    .vp-card p {
+      font-size: 0.9rem;
+      color: #6B7280;
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* ─── SECTION HEADERS ─── */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 1rem;
+    }
+
+    .section-header h2 {
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      letter-spacing: -0.03em;
+      color: var(--black);
+      line-height: 1.1;
+    }
+
+    .section-header p {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: var(--gray);
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* ─── LEAD FORM ─── */
+    .lead-section {
+      padding: 100px 5%;
+      background: var(--blue);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lead-section::before {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      border: 80px solid rgba(255,255,255,0.05);
+    }
+
+    .lead-inner {
+      max-width: 740px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .lead-inner h2 {
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      color: #fff;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    .lead-inner p {
+      color: rgba(255,255,255,0.75);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+    }
+
+    .lead-form {
+      background: #fff;
+      border-radius: 12px;
+      padding: 2.5rem;
+      text-align: left;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--black);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.01em;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--black);
+      background: var(--gray-light);
+      transition: border-color 0.2s, background 0.2s;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      background: #fff;
+    }
+
+    .form-group textarea { min-height: 90px; }
+
+    .form-submit {
+      width: 100%;
+      background: var(--blue);
+      color: #fff;
+      padding: 1rem;
+      border: none;
+      border-radius: 6px;
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      transition: background 0.2s, transform 0.15s;
+      margin-top: 0.5rem;
+    }
+
+    .form-submit:hover { background: #1e40af; transform: translateY(-1px); }
+
+    .form-note {
+      text-align: center;
+      margin-top: 0.8rem;
+      font-size: 0.78rem;
+      color: var(--gray);
+    }
+
+    /* ─── SERVICES PAGE ─── */
+    .services-hero {
+      padding: 140px 5% 60px;
+      background: var(--black);
+    }
+
+    .services-hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      color: #fff;
+      letter-spacing: -0.03em;
+      max-width: 800px;
+      line-height: 1.05;
+    }
+
+    .services-hero h1 span { color: var(--blue-glow); }
+
+    .services-hero p {
+      margin-top: 1.5rem;
+      font-size: 1.05rem;
+      color: #6B7280;
+      max-width: 580px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .services-list {
+      padding: 80px 5%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .service-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+      padding: 5rem 0;
+      border-bottom: 1px solid var(--border);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .service-card.visible { opacity: 1; transform: none; }
+    .service-card:last-child { border-bottom: none; }
+
+    .service-card.reverse { direction: rtl; }
+    .service-card.reverse > * { direction: ltr; }
+
+    .service-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 5rem;
+      font-weight: 800;
+      color: rgba(59,130,246,0.08);
+      line-height: 1;
+      margin-bottom: -1rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.7rem;
+      letter-spacing: -0.02em;
+      color: var(--black);
+      margin-bottom: 0.8rem;
+      line-height: 1.15;
+    }
+
+    .service-tagline {
+      font-size: 0.95rem;
+      color: var(--blue);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    .deliverables {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+
+    .deliverables li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 0.5rem 0;
+      font-size: 0.92rem;
+      color: var(--off-black);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      line-height: 1.5;
+    }
+
+    .deliverables li:last-child { border-bottom: none; }
+
+    .check-icon {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      background: rgba(59,130,246,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .service-visual {
+      background: var(--gray-light);
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-visual::before {
+      content: '';
+      position: absolute;
+      top: -50px; right: -50px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(59,130,246,0.1), transparent 70%);
+    }
+
+    .service-icon-large {
+      width: 80px;
+      height: 80px;
+      background: var(--blue);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .service-stat {
+      text-align: center;
+    }
+
+    .service-stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    .service-stat-label {
+      font-size: 0.82rem;
+      color: var(--gray);
+      margin-top: 0.2rem;
+    }
+
+    /* ─── ABOUT PAGE ─── */
+    .about-hero {
+      padding: 140px 5% 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--blue) 0%, var(--blue-glow) 100%);
+    }
+
+    .about-hero-inner {
+      max-width: 700px;
+    }
+
+    .about-hero h1 {
+      font-size: clamp(2.5rem, 4.5vw, 3.8rem);
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-hero p {
+      font-size: 1.1rem;
+      color: var(--gray);
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    .about-mission {
+      padding: 80px 5%;
+      background: var(--off-black);
+    }
+
+    .about-mission-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .about-mission h2 {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      color: #fff;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      line-height: 1.15;
+    }
+
+    .about-mission p {
+      color: #9CA3AF;
+      font-size: 0.97rem;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    .about-mission p + p { margin-top: 1rem; }
+
+    .mission-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+
+    .m-stat {
+      background: #161D2B;
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .m-stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--blue-glow);
+    }
+
+    .m-stat-label {
+      font-size: 0.82rem;
+      color: #6B7280;
+      margin-top: 0.4rem;
+    }
+
+    /* ─── TEAM ─── */
+    .team-section {
+      padding: 100px 5%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    <!-- Replace placeholder images and bios with real team photos and info -->
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .team-card {
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: border-color 0.3s, transform 0.3s;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s;
+    }
+
+    .team-card.visible { opacity: 1; transform: none; }
+    .team-card:hover { border-color: var(--blue); }
+
+    .team-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--gray-light);
+      margin: 0 auto 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid var(--border);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .team-avatar svg { opacity: 0.3; }
+
+    .team-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 0.3rem;
+    }
+
+    .team-role {
+      font-size: 0.8rem;
+      color: var(--blue);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+    }
+
+    .team-bio {
+      font-size: 0.88rem;
+      color: var(--gray);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--black);
+      padding: 3rem 5%;
+      border-top: 1px solid #1F2937;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-logo-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      color: #fff;
+    }
+
+    .footer-tagline {
+      font-size: 0.8rem;
+      color: #4B5563;
+      margin-top: 0.3rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.85rem;
+      color: #6B7280;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: #fff; }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: #374151;
+      width: 100%;
+      text-align: center;
+      padding-top: 1.5rem;
+      border-top: 1px solid #1F2937;
+      margin-top: 1rem;
+    }
+
+    /* ─── FADE IN ─── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; text-align: center; }
+      .hero-sub { max-width: 100%; }
+      .hero-actions { justify-content: center; }
+      .hero-visual { order: -1; }
+      .octopus-wrap { width: 280px; height: 280px; }
+      .value-props-grid { grid-template-columns: 1fr; gap: 2px; }
+      .service-card { grid-template-columns: 1fr; gap: 2rem; }
+      .service-card.reverse { direction: ltr; }
+      .about-mission-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+      .burger { display: flex; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 72px; left: 0; right: 0;
+        background: var(--white);
+        padding: 2rem;
+        border-bottom: 1px solid var(--border);
+        gap: 1.5rem;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .team-grid { grid-template-columns: 1fr; }
+      .mission-stats { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ─── SUCCESS STATE ─── */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .form-success.show { display: block; }
+    .form-success h3 {
+      font-size: 1.5rem;
+      color: var(--black);
+      margin-bottom: 0.5rem;
+    }
+    .form-success p { color: var(--gray); font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════ NAV ═══════════════════ -->
+<nav>
+  <a class="nav-logo" onclick="showPage('home')">
+    <svg width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Octopus head -->
+      <ellipse cx="50" cy="38" rx="24" ry="22" fill="#2563EB"/>
+      <!-- Eyes -->
+      <circle cx="43" cy="35" r="4" fill="white"/>
+      <circle cx="57" cy="35" r="4" fill="white"/>
+      <circle cx="44" cy="35" r="2" fill="#1e40af"/>
+      <circle cx="58" cy="35" r="2" fill="#1e40af"/>
+      <!-- 8 Tentacles -->
+      <path d="M32 54 Q22 68 18 82 Q16 88 20 90 Q24 92 26 86 Q28 80 34 70" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <path d="M38 58 Q32 74 30 88 Q29 94 34 95 Q39 95 39 89 Q39 82 42 68" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <path d="M46 60 Q44 76 44 90 Q44 96 50 96 Q56 96 56 90 Q56 76 54 60" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <path d="M54 60 Q58 74 58 88 Q58 94 62 95 Q67 95 67 89 Q67 82 62 68" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <path d="M62 58 Q68 72 70 86 Q72 92 76 90 Q80 88 78 82 Q76 76 70 62" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <path d="M68 54 Q78 66 82 80 Q84 86 80 88 Q76 90 74 84 Q72 78 64 66" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <path d="M36 55 Q24 60 16 72 Q12 78 16 82 Q20 86 24 80 Q30 70 40 62" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <path d="M64 55 Q76 60 84 72 Q88 78 84 82 Q80 86 76 80 Q70 70 60 62" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+    </svg>
+    <span class="nav-logo-text">Eightfold System</span>
+  </a>
+
+  <button class="burger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links" id="nav-links">
+    <li><a onclick="showPage('home'); closeNav();" id="nav-home">Home</a></li>
+    <li><a onclick="showPage('services'); closeNav();" id="nav-services">Services</a></li>
+    <li><a onclick="showPage('about'); closeNav();" id="nav-about">About</a></li>
+    <li><a onclick="scrollToForm(); closeNav();" class="nav-cta">Get Free Contacts</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════ HOME PAGE ═══════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Signal-Driven GTM Engineering</div>
+      <h1>You Don't Need 5 SDRs.<br><span>One GTM Engineer</span> Gets You the Same Results.</h1>
+      <p class="hero-sub">Eightfold System builds signal-driven outbound machines — engineered, automated, and optimized — so you stop hiring and start closing.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="scrollToForm()">
+          Get 100 Free Contacts
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
+        <button class="btn-ghost" onclick="showPage('services')">See Our Services</button>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="octopus-wrap">
+        <div class="octopus-ring"></div>
+        <div class="octopus-ring-2"></div>
+        <div class="octopus-bg"></div>
+        <div class="octopus-svg">
+          <svg width="320" height="320" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="50" cy="38" rx="24" ry="22" fill="#2563EB"/>
+            <circle cx="43" cy="35" r="4" fill="white"/>
+            <circle cx="57" cy="35" r="4" fill="white"/>
+            <circle cx="44" cy="35" r="2" fill="#1e40af"/>
+            <circle cx="58" cy="35" r="2" fill="#1e40af"/>
+            <!-- smile -->
+            <path d="M44 43 Q50 48 56 43" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <!-- 8 Tentacles -->
+            <path d="M32 54 Q22 68 18 82 Q16 88 20 90 Q24 92 26 86 Q28 80 34 70" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <path d="M38 58 Q32 74 30 88 Q29 94 34 95 Q39 95 39 89 Q39 82 42 68" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <path d="M46 60 Q44 76 44 90 Q44 96 50 96 Q56 96 56 90 Q56 76 54 60" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <path d="M54 60 Q58 74 58 88 Q58 94 62 95 Q67 95 67 89 Q67 82 62 68" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <path d="M62 58 Q68 72 70 86 Q72 92 76 90 Q80 88 78 82 Q76 76 70 62" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <path d="M68 54 Q78 66 82 80 Q84 86 80 88 Q76 90 74 84 Q72 78 64 66" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <path d="M36 55 Q24 60 16 72 Q12 78 16 82 Q20 86 24 80 Q30 70 40 62" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <path d="M64 55 Q76 60 84 72 Q88 78 84 82 Q80 86 76 80 Q70 70 60 62" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Value Props -->
+  <section class="value-props">
+    <div class="value-props-grid">
+      <div class="vp-card fade-in">
+        <div class="vp-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        </div>
+        <h3>Signal-Based Personalization</h3>
+        <p>We target based on real buying signals — intent triggers, firmographics, and behavioral data — not spray-and-pray blasting.</p>
+      </div>
+      <div class="vp-card fade-in" style="transition-delay:0.1s">
+        <div class="vp-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3>Omni-Channel Outreach</h3>
+        <p>Email, LinkedIn, and every channel your buyer lives in — coordinated, sequenced, and timed to close faster.</p>
+      </div>
+      <div class="vp-card fade-in" style="transition-delay:0.2s">
+        <div class="vp-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <h3>Engineered Automation</h3>
+        <p>Clay, Smartlead, and your CRM wired together so leads enrich, segment, and route to outreach without manual labor.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lead Form -->
+  <section class="lead-section" id="lead-form">
+    <div class="lead-inner">
+      <h2>Get 100 Free Verified Contacts — On Us</h2>
+      <p>Tell us who you're targeting and we'll hand-deliver 100 enriched, verified contacts you can reach out to today. No strings. No pitch. Just value.</p>
+      <div class="lead-form">
+        <div id="form-content">
+          <form action="https://formspree.io/f/YOURFORMID" method="POST" onsubmit="handleSubmit(event, this)">
+            <div class="form-group">
+              <label for="icp">Who is your Ideal Customer Profile (ICP)?</label>
+              <textarea id="icp" name="icp" placeholder="e.g. B2B SaaS companies, 50–500 employees, Series A/B, VP of Sales or RevOps..." required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="vp">What's your value proposition?</label>
+              <textarea id="vp" name="value_proposition" placeholder="e.g. We help SDR teams cut prospecting time by 60% using AI enrichment..." required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="email">Your email address</label>
+              <input type="email" id="email" name="email" placeholder="you@company.com" required />
+            </div>
+            <button type="submit" class="form-submit">Send Me 100 Contacts →</button>
+            <p class="form-note">We'll review your ICP, build the list, and send it within 48 hours.</p>
+          </form>
+        </div>
+        <div class="form-success" id="form-success">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 1rem;display:block"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <h3>You're on the list.</h3>
+          <p>We'll review your ICP and send your 100 contacts within 48 hours. Watch your inbox.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page-home -->
+
+<!-- ═══════════════════ SERVICES PAGE ═══════════════════ -->
+<div class="page" id="page-services">
+
+  <section class="services-hero">
+    <div class="hero-eyebrow" style="color:#60A5FA">What We Build</div>
+    <h1>GTM systems that<br><span>generate pipeline</span><br>on autopilot.</h1>
+    <p>Three core services. Each one engineered to compound on the last. No bloated retainers, no junior account reps — just precision GTM execution.</p>
+  </section>
+
+  <div class="services-list">
+
+    <!-- Service 1 -->
+    <div class="service-card">
+      <div class="service-content">
+        <div class="service-number">01</div>
+        <h3>Signal-Driven Outbound Campaign Setup</h3>
+        <p class="service-tagline">"We build high-signal, hyper-personalized outbound systems that fill your calendar with qualified opportunities."</p>
+        <ul class="deliverables">
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>ICP & TAM definition</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Data enrichment and verification</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Multi-channel outreach (email + LinkedIn)</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Signal-based personalization (intent, firmographics, behavior)</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Campaign setup in Clay + Smartlead / Instantly</li>
+        </ul>
+        <button class="btn-primary" onclick="showPage('home'); setTimeout(scrollToForm, 100)">Start with Free Contacts →</button>
+      </div>
+      <div class="service-visual">
+        <div class="service-icon-large">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        </div>
+        <div class="service-stat">
+          <div class="service-stat-num">3×</div>
+          <div class="service-stat-label">Higher reply rates vs generic outbound</div>
+        </div>
+        <div class="service-stat">
+          <div class="service-stat-num">14d</div>
+          <div class="service-stat-label">Average time to first qualified meeting</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service 2 -->
+    <div class="service-card reverse">
+      <div class="service-content">
+        <div class="service-number">02</div>
+        <h3>GTM Infrastructure & Automation</h3>
+        <p class="service-tagline">"We engineer your GTM systems so growth happens because your tools are connected — not because your team is overworked."</p>
+        <ul class="deliverables">
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>GTM stack buildouts (Clay + CRM + automation layers)</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Data workflows and routing rules</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Intent & trigger capture</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Automated enrichment → routing → outreach handoff</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>CRM clean-up and scoring logic implementation</li>
+        </ul>
+        <button class="btn-primary" onclick="showPage('home'); setTimeout(scrollToForm, 100)">Start with Free Contacts →</button>
+      </div>
+      <div class="service-visual">
+        <div class="service-icon-large">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="service-stat">
+          <div class="service-stat-num">80%</div>
+          <div class="service-stat-label">Reduction in manual SDR work</div>
+        </div>
+        <div class="service-stat">
+          <div class="service-stat-num">0</div>
+          <div class="service-stat-label">Manual bottlenecks in your pipeline</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service 3 -->
+    <div class="service-card">
+      <div class="service-content">
+        <div class="service-number">03</div>
+        <h3>Ongoing Outbound Management & Optimization</h3>
+        <p class="service-tagline">"We don't just launch campaigns — we refine them weekly to scale predictable pipeline."</p>
+        <ul class="deliverables">
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Monthly outbound execution</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Deliverability tuning + inbox rotation</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>A/B testing (stack split methodology)</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Weekly insights & optimization cycles</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Reporting + pipeline forecasting</li>
+        </ul>
+        <button class="btn-primary" onclick="showPage('home'); setTimeout(scrollToForm, 100)">Start with Free Contacts →</button>
+      </div>
+      <div class="service-visual">
+        <div class="service-icon-large">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="service-stat">
+          <div class="service-stat-num">QoQ</div>
+          <div class="service-stat-label">Consistent pipeline growth quarter over quarter</div>
+        </div>
+        <div class="service-stat">
+          <div class="service-stat-num">52</div>
+          <div class="service-stat-label">Weeks of continuous optimization per year</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /services-list -->
+
+</div><!-- /page-services -->
+
+<!-- ═══════════════════ ABOUT PAGE ═══════════════════ -->
+<div class="page" id="page-about">
+
+  <section class="about-hero">
+    <div class="about-hero-inner">
+      <div class="section-eyebrow">The Team</div>
+      <h1>The Team Behind the System</h1>
+      <p>We're a small team of GTM engineers, operators, and builders. No account managers, no juniors handed your account. You work directly with the people who built this — people who've been in the trenches of B2B sales and decided to engineer a better way.</p>
+    </div>
+  </section>
+
+  <section class="about-mission">
+    <div class="about-mission-inner">
+      <div>
+        <h2>Built for founders tired of hiring their way to growth.</h2>
+        <p>The traditional playbook says: hire 5 SDRs, buy a list, and blast emails until something sticks. We rejected that. Every system we build is grounded in data, signals, and automation — so one engineer can do what a full team used to do.</p>
+        <p>We call it the Eightfold approach: eight tentacles, one brain. Omni-channel reach, single point of accountability.</p>
+      </div>
+      <div class="mission-stats">
+        <div class="m-stat">
+          <div class="m-stat-num">8</div>
+          <div class="m-stat-label">Channels. One system.</div>
+        </div>
+        <div class="m-stat">
+          <div class="m-stat-num">1×</div>
+          <div class="m-stat-label">GTM Engineer = 5 SDRs</div>
+        </div>
+        <div class="m-stat">
+          <div class="m-stat-num">14d</div>
+          <div class="m-stat-label">Avg. to first meeting</div>
+        </div>
+        <div class="m-stat">
+          <div class="m-stat-num">0</div>
+          <div class="m-stat-label">Generic cold emails sent</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Replace placeholder images and bios with real team photos and info -->
+  <section class="team-section">
+    <div class="section-header">
+      <div class="section-eyebrow">Meet the Founders</div>
+      <h2>People you'll actually work with</h2>
+      <p>No handoffs. No account managers. The people who pitch you are the people who build for you.</p>
+    </div>
+
+    <div class="team-grid">
+      <!-- Card 1 -->
+      <div class="team-card">
+        <div class="team-avatar">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </div>
+        <div class="team-name">Founder Name</div>
+        <div class="team-role">GTM Engineer / Co-Founder</div>
+        <p class="team-bio">2-line bio placeholder. Replace with real background, expertise, and what this person brings to the table for clients.</p>
+      </div>
+      <!-- Card 2 -->
+      <div class="team-card" style="transition-delay:0.1s">
+        <div class="team-avatar">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </div>
+        <div class="team-name">Founder Name</div>
+        <div class="team-role">Outbound Strategist / Co-Founder</div>
+        <p class="team-bio">2-line bio placeholder. Replace with real background, expertise, and what this person brings to the table for clients.</p>
+      </div>
+      <!-- Card 3 -->
+      <div class="team-card" style="transition-delay:0.2s">
+        <div class="team-avatar">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </div>
+        <div class="team-name">Founder Name</div>
+        <div class="team-role">GTM Infrastructure / Co-Founder</div>
+        <p class="team-bio">2-line bio placeholder. Replace with real background, expertise, and what this person brings to the table for clients.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="lead-section">
+    <div class="lead-inner">
+      <h2>Ready to see what a real GTM system looks like?</h2>
+      <p>Start with 100 free verified contacts tailored to your ICP. No pitch, no obligation — just proof that we know how to find your buyers.</p>
+      <div class="lead-form">
+        <div id="form-content-about">
+          <form action="https://formspree.io/f/YOURFORMID" method="POST" onsubmit="handleSubmit(event, this, 'form-success-about')">
+            <div class="form-group">
+              <label for="icp2">Who is your Ideal Customer Profile (ICP)?</label>
+              <textarea id="icp2" name="icp" placeholder="e.g. B2B SaaS companies, 50–500 employees, Series A/B, VP of Sales or RevOps..." required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="vp2">What's your value proposition?</label>
+              <textarea id="vp2" name="value_proposition" placeholder="e.g. We help SDR teams cut prospecting time by 60%..." required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="email2">Your email address</label>
+              <input type="email" id="email2" name="email" placeholder="you@company.com" required />
+            </div>
+            <button type="submit" class="form-submit">Send Me 100 Contacts →</button>
+            <p class="form-note">We'll review your ICP, build the list, and send it within 48 hours.</p>
+          </form>
+        </div>
+        <div class="form-success" id="form-success-about">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 1rem;display:block"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <h3>You're on the list.</h3>
+          <p>We'll review your ICP and send your 100 contacts within 48 hours. Watch your inbox.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page-about -->
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">
+        <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="50" cy="38" rx="24" ry="22" fill="#2563EB"/>
+          <circle cx="43" cy="35" r="4" fill="white"/><circle cx="57" cy="35" r="4" fill="white"/>
+          <circle cx="44" cy="35" r="2" fill="#1e40af"/><circle cx="58" cy="35" r="2" fill="#1e40af"/>
+          <path d="M32 54 Q22 68 18 82 Q16 88 20 90 Q24 92 26 86 Q28 80 34 70" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M38 58 Q32 74 30 88 Q29 94 34 95 Q39 95 39 89 Q39 82 42 68" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M46 60 Q44 76 44 90 Q44 96 50 96 Q56 96 56 90 Q56 76 54 60" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M54 60 Q58 74 58 88 Q58 94 62 95 Q67 95 67 89 Q67 82 62 68" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M62 58 Q68 72 70 86 Q72 92 76 90 Q80 88 78 82 Q76 76 70 62" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M68 54 Q78 66 82 80 Q84 86 80 88 Q76 90 74 84 Q72 78 64 66" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M36 55 Q24 60 16 72 Q12 78 16 82 Q20 86 24 80 Q30 70 40 62" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M64 55 Q76 60 84 72 Q88 78 84 82 Q80 86 76 80 Q70 70 60 62" stroke="#2563EB" stroke-width="5" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="footer-logo-text">Eightfold System</span>
+      </div>
+      <div class="footer-tagline">Signal-Driven GTM Engineering</div>
+    </div>
+    <ul class="footer-links">
+      <li><a onclick="showPage('home')">Home</a></li>
+      <li><a onclick="showPage('services')">Services</a></li>
+      <li><a onclick="showPage('about')">About</a></li>
+      <li><a onclick="showPage('home'); setTimeout(scrollToForm,100)">Get Free Contacts</a></li>
+    </ul>
+  </div>
+  <div class="footer-copy">© 2025 Eightfold System. All rights reserved.</div>
+</footer>
+
+<script>
+  // ─── Page Navigation ───
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active-link'));
+    const el = document.getElementById('nav-' + name);
+    if (el) el.classList.add('active-link');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Re-trigger animations for new page
+    setTimeout(initObserver, 100);
+  }
+
+  function scrollToForm() {
+    const form = document.getElementById('lead-form');
+    if (form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // ─── Mobile Nav ───
+  const burger = document.getElementById('burger');
+  const navLinks = document.getElementById('nav-links');
+  burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  function closeNav() { navLinks.classList.remove('open'); }
+
+  // ─── Form submission ───
+  function handleSubmit(e, form, successId) {
+    e.preventDefault();
+    const data = new FormData(form);
+    const sid = successId || 'form-success';
+
+    fetch(form.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    }).then(r => {
+      if (r.ok) {
+        form.closest('[id^="form-content"]').style.display = 'none';
+        document.getElementById(sid).classList.add('show');
+      } else {
+        alert('Something went wrong. Please try again or email us directly.');
+      }
+    }).catch(() => {
+      // Fallback — show success anyway in demo mode
+      form.closest('[id^="form-content"]').style.display = 'none';
+      document.getElementById(sid).classList.add('show');
+    });
+  }
+
+  // ─── Scroll Animations ───
+  function initObserver() {
+    const items = document.querySelectorAll('.fade-in, .service-card, .team-card');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    items.forEach(i => obs.observe(i));
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initObserver();
+    document.getElementById('nav-home').classList.add('active-link');
+  });
+</script>
+</body>
+</html>
